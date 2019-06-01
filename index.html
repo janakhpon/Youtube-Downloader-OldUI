@@ -27,51 +27,53 @@
       <div class="sidebar">
         <div class="sidebar_canvas">
           <div class="sidebar_first">
-
-
             <div class="first_topbar">
               <ul class="main-nav">
-
                 <li class="second-nav_content">
                   <i id="reload" class="fas fa-sync-alt fa-2x"> </i>
                   <h5>REFRESH</h5>
                 </li>
                 <li class="second-nav_content">
-                  <i id="backward" class="fas fa-arrow-alt-circle-left fa-2x"></i>
+                  <i
+                    id="backward"
+                    class="fas fa-arrow-alt-circle-left fa-2x"
+                  ></i>
                   <h5>BACKWARD</h5>
                 </li>
                 <li class="second-nav_content">
-                  <i id="forward" class="fas fa-arrow-alt-circle-right fa-2x"></i>
+                  <i
+                    id="forward"
+                    class="fas fa-arrow-alt-circle-right fa-2x"
+                  ></i>
                   <h5>FORWARD</h5>
                 </li>
                 <li class="second-nav_content">
                   <i id="power" class="fas fa-power-off fa-2x"></i>
                   <h5>SHUTDOWN</h5>
                 </li>
-
-
               </ul>
             </div>
+          </div>
 
-
-            <div class="first_bottombar">
-              
+          <div class="main-second">
+            <div class="ms-left">
+              <input type="text" id="vd-status" class="ms-left__status" />
+              <input type="text" id="vd-mb" class="ms-left__status" />
+              <input type="text" id="vd-percent" class="ms-left__status" />
+              <input type="text" id="vd-run" class="ms-left__status" />
+              <input type="text" id="vd-time" class="ms-left__status" />
+              <input type="text" id="vd-complete" class="ms-left__status" />
+              <input type="text" id="vd-count" class="ms-left__count" />
             </div>
-          </div>
-
-          <div class="sidebar_second">
-            <input type="text" id="statuschange" />
-            <input type="text" id="statuschange1" />
-          </div>
-
-          <div class="sidebar_third">
-            <input type="text" id="progress1" />
-            <input type="text" id="progress2" />
-          </div>
-
-          <div class="sidebar_fourth">
-            <input type="text" id="progress3" />
-            <input type="text" id="progress4" />
+            <div class="ms-right">
+              <input type="text" id="ad-status" class="ms-left__status" />
+              <input type="text" id="ad-mb" class="ms-left__status" />
+              <input type="text" id="ad-percent" class="ms-left__status" />
+              <input type="text" id="ad-run" class="ms-left__status" />
+              <input type="text" id="ad-time" class="ms-left__status" />
+              <input type="text" id="ad-complete" class="ms-left__status" />
+              <input type="text" id="ad-count" class="ms-left__count" />
+            </div>
           </div>
         </div>
       </div>
@@ -89,22 +91,20 @@
           ></webview>
 
           <!---------------------------------------- ** START NAVIGATION ** --------------------------------------------->
-         
-            <div id="video" class="navigation__video">
-              <span class="navigation__video--label">
-                <i class="fab fa-youtube fa-2x"></i>
-              </span>
-            </div>
 
-            <div id="audio" class="navigation__audio">
-              <span class="navigation__audio--label">
-                <i id="icon__audio" class="fas fa-headphones-alt fa-2x"></i>
-              </span>
-            </div>
-         
+          <div id="video" class="navigation__video">
+            <span class="navigation__video--label">
+              <i class="fab fa-youtube fa-2x"></i>
+            </span>
+          </div>
+
+          <div id="audio" class="navigation__audio">
+            <span class="navigation__audio--label">
+              <i id="icon__audio" class="fas fa-headphones-alt fa-2x"></i>
+            </span>
+          </div>
+
           <!---------------------------------------- ** END NAVIGATION ** --------------------------------------------->
-
-
         </div>
       </div>
       <!---------------------------------------- ** END MAIN PANEL ** --------------------------------------------->
