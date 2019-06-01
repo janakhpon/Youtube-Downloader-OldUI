@@ -16,6 +16,7 @@ let video = ById("video"),
   audio = ById("audio"),
   view = ById("view"),
   power = ById("power"),
+  reload = ById("reload"),
   backward = ById("backward"),
   forward = ById("forward"),
   progress1 = ById("progress1"),
@@ -113,7 +114,11 @@ function downAudio() {
   ytdl(url, {
     filter: format => {
       return format.container === "m4a" && !format.encoding;
-    }
+    },
+    quality: "highestaudio",
+    filter: "audioonly"
+  
+    
   })
     .pipe(fs.createWriteStream(audioOutput))
     .on("finish", () => {
