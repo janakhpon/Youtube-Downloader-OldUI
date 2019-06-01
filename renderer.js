@@ -19,33 +19,61 @@ let video = ById("video"),
   reload = ById("reload"),
   backward = ById("backward"),
   forward = ById("forward"),
-  progress1 = ById("progress1"),
-  progress2 = ById("progress2"),
-  progress3 = ById("progress3"),
-  progress4 = ById("progress4"),
-  status = ById("statuschange"),
-  status1 = ById("statuschange1");
+  vdstatus = ById("vd-status"),
+  vdmb = ById("vd-mb"),
+  vdpercent = ById("vd-percent"),
+  vdrun = ById("vd-run"),
+  vdtime = ById("vd-time"),
+  vdcomplete = ById("vd-complete"),
+  vdcount = ById("vd-count"),
+  adstatus = ById("ad-status"),
+  admb = ById("ad-mb"),
+  adpercent = ById("ad-percent"),
+  adrun = ById("ad-run"),
+  adtime = ById("ad-time"),
+  adcomplete = ById("ad-complete"),
+  adcount = ById("ad-count");
 
-var fs = require("fs"),
+const fs = require("fs"),
   ytdl = require("ytdl-core"),
   ffmpeg = require("fluent-ffmpeg");
 
-var msgstart = "started downloading now ...",
-  msgfinished = "downloaded files successfully",
-  msgvdownloading = "video downloading ....",
-  msgadownloading = "audio downloading ....",
-  msgdefault = " * * * * * * * * ",
-  msgnormal = "no progress is available";
+var msgastart = "downloading audio ..",
+    msgacomplete = "Saved audio to Download/",
+    msgvstart = "downloading video ..",
+    msgvcomplete = "Saved video to Download/",
+    msgplace = "------  ------",
+  msginit = ".    .  .  . . ....",
+    msgcount = "0 out of 0",
+    msgdefault = "no task available";
 
-status.value = msgnormal;
-status1.value = msgdefault;
+var xcount = 0;
+var pcount = 0;
 
-//GET VIDEO MAIN FUNCTION
+//Video trigerring
+vdstatus.value = msgdefault;
+vdmb.value = msgplace;
+vdpercent.value = msgplace;
+vdrun.value = msgplace;
+vdtime.value = msgplace;
+vdcomplete.value = msgplace;
+vdcount.value = msgcount;
 
+//Audio triggering
+adstatus.value = msgdefault;
+admb.value = msgplace;
+adpercent.value = msgplace;
+adrun.value = msgplace;
+adtime.value = msgplace;
+adcomplete.value = msgplace;
+adcount.value = msgcount;
+
+//Download video
 function downVideo() {
+
+  pcount++;
   let name = view.getTitle();
   const url = view.getURL();
-
   const output = path.resolve(
     `${app.getPath("home")}/Downloads/`,
     `${name}` + ".mp4"
@@ -54,62 +82,66 @@ function downVideo() {
     quality: "highestvideo",
     filter: "audioandvideo"
   });
-  let starttime;
-  status1.value = msgvdownloading;
 
+  //Video trigerring
+  vdstatus.value = msgvstart;
+  vdpercent.value = msginit;
+  vdrun.value = msginit;
+  vdtime.value = msginit;
+  vdcomplete.value = msginit;
+  vdcount.value = msginit;
+  
+
+  var starttime;
   video.pipe(fs.createWriteStream(output));
   video.once("response", () => {
     starttime = Date.now();
   });
 
   video.on("progress", (chunkLength, downloaded, total) => {
-    status.value = msgstart;
-
     const floatDownloaded = downloaded / total;
     const downloadedMinutes = (Date.now() - starttime) / 1000 / 60;
+    var vd_percentevalue = (floatDownloaded * 100).toFixed(2) + "%";
+    vdpercent.value = vd_percentevalue;
 
-    var progress1v = "Progress : " + (floatDownloaded * 100).toFixed(2) + "%";
-    progress1.value = progress1v;
-
-    var progress2v =
-      "Downloaded : " +
+    var vd_mbvalue =
+      ""+
       (downloaded / 1024 / 1024).toFixed(2) +
       "MB of " +
       (total / 1024 / 1024).toFixed(2) +
       "MB";
-    progress2.value = progress2v;
+    vdmb.value = vd_mbvalue;
 
-    var progress3v =
-      "Running for : " + downloadedMinutes.toFixed(2) + "minutes";
-    progress3.value = progress3v;
+    var vd_runvalue = "Running for " + downloadedMinutes.toFixed(2) + "mins";
+    vdrun.value = vd_runvalue;
 
-    var progress4v =
-      "Estimated time left : " +
+    var vd_timevalue =
       (downloadedMinutes / floatDownloaded - downloadedMinutes).toFixed(2) +
-      "minutes";
-    progress4.value = progress4v;
+      "mins left";
+    vdtime.value = vd_timevalue;
   });
+
+  
   video.on("end", () => {
-    status.value = msgfinished;
-    status1.value =
-      "Video saved to " + `${app.getPath("home")}/Downloads/${name}.mp4`;
+    vdcomplete.value = msgvcomplete;
   });
+
+  xcount++;
+  vdcount.value = ""+xcount+" out of "+pcount;
+ 
 }
 
-//GET AUDIO FUNCTION
-
+//Download audio
 function downAudio() {
   const url = view.getURL();
 
-
   let name = view.getTitle();
-
 
   let start = Date.now();
   const audioOutput = path.resolve(
-  __dirname,
-  `${app.getPath("home")}/Downloads/${name}.m4a`
-);
+    __dirname,
+    `${app.getPath("home")}/Downloads/${name}.m4a`
+  );
 
   ytdl(url, {
     filter: format => {
@@ -117,26 +149,17 @@ function downAudio() {
     },
     quality: "highestaudio",
     filter: "audioonly"
-  
-    
   })
     .pipe(fs.createWriteStream(audioOutput))
     .on("finish", () => {
       ffmpeg()
         .on("error", console.error)
         .on("progress", progress => {
-          status.value = msgstart;
-          progress1.value = progress.targetSize + "kb downloaded";
         })
         .on("end", () => {
           fs.unlink(audioOutput, err => {
             if (err) console.error(err);
             else {
-                    status.value = msgfinished;
-                    progress4.value =
-                      "Success" +
-                      (Date.now() - start) / 1000 +
-                      "s";
             }
           });
         });
@@ -144,25 +167,33 @@ function downAudio() {
 }
 
 //Move to Previous song
-
 function goBackward() {
   view.goBack();
 }
 
 //Exit from JDOWNLOADER
-
 function goExit() {
   app.exit(0);
 }
 
 //Move to Next song
-
 function goNext() {
   view.goForward();
 }
 
-//Assign respective values
+function goStart() {
+  remote.getCurrentWindow().reload();
+  adstatus.value = msgdefault;
+  adstatus.value = msgplace;
+  adpercent.value = msgplace;
+  adrun.value = msgplace;
+  adtime.value = msgplace;
+  adcomplete.value = msgplace;
+  adcount.value = msgplace;
+}
 
+//Assign respective values
+reload.addEventListener("click", goStart);
 video.addEventListener("click", downVideo);
 audio.addEventListener("click", downAudio);
 power.addEventListener("click", goExit);
