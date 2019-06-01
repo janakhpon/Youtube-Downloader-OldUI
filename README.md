@@ -1,5 +1,5 @@
-# JDownloader
- JDownloader is built for downloading videos/audios from Youtube. JDownloader uses responsive design pattern.check out [JDownloader](https://github.com/janakhpon/DownYoutube.git).
+# DownYoutube
+ A GUI Downloader for downloading songs and videos from youtube alone. It has rich user interface compiled from SCSS using Grid and Flex layout and also coming with animation.Check out here[JDownloader](https://github.com/janakhpon/DownYoutube.git).
 
 
 
