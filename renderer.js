@@ -7,11 +7,9 @@ const ById = function(id) {
 };
 
 //GET PATH
-
 const path = require("path");
-const readline = require("readline");
-//ASSIGN RESPECTIVE IDS
 
+//ASSIGN RESPECTIVE IDS
 let video = ById("video"),
   audio = ById("audio"),
   view = ById("view"),
@@ -39,16 +37,18 @@ const fs = require("fs"),
   ffmpeg = require("fluent-ffmpeg");
 
 var msgastart = "downloading audio ..",
-    msgacomplete = "Saved audio to Download/",
-    msgvstart = "downloading video ..",
-    msgvcomplete = "Saved video to Download/",
-    msgplace = "------  ------",
+  msgacomplete = "Saved audio to Download/",
+  msgvstart = "downloading video ..",
+  msgvcomplete = "Saved video to Download/",
+  msgplace = "------  ------",
   msginit = ".    .  .  . . ....",
-    msgcount = "0 out of 0",
-    msgdefault = "no task available";
+  msgcount = "0 out of 0",
+  msgdefault = "no task available";
 
 var xcount = 0;
 var pcount = 0;
+var xacount = 0;
+var pacount = 0;
 
 //Video trigerring
 vdstatus.value = msgdefault;
@@ -70,7 +70,6 @@ adcount.value = msgcount;
 
 //Download video
 function downVideo() {
-
   pcount++;
   let name = view.getTitle();
   const url = view.getURL();
@@ -90,9 +89,8 @@ function downVideo() {
   vdtime.value = msginit;
   vdcomplete.value = msginit;
   vdcount.value = msginit;
-  
 
-  var starttime;
+  let starttime;
   video.pipe(fs.createWriteStream(output));
   video.once("response", () => {
     starttime = Date.now();
@@ -105,7 +103,7 @@ function downVideo() {
     vdpercent.value = vd_percentevalue;
 
     var vd_mbvalue =
-      ""+
+      "" +
       (downloaded / 1024 / 1024).toFixed(2) +
       "MB of " +
       (total / 1024 / 1024).toFixed(2) +
@@ -121,27 +119,29 @@ function downVideo() {
     vdtime.value = vd_timevalue;
   });
 
-  
   video.on("end", () => {
     vdcomplete.value = msgvcomplete;
+    vdcount.value = "" + xcount + " out of " + pcount;
   });
 
   xcount++;
-  vdcount.value = ""+xcount+" out of "+pcount;
- 
 }
 
 //Download audio
 function downAudio() {
   const url = view.getURL();
-
   let name = view.getTitle();
+  pacount++;
+  adstatus.value = msgastart;
 
-  let start = Date.now();
   const audioOutput = path.resolve(
     __dirname,
     `${app.getPath("home")}/Downloads/${name}.m4a`
   );
+
+  const mms = (Date.now()) / 1000 / 60;
+  var ad_runvalue = "Running for " + mms.toFixed(2) + "miliseconds";
+  adrun.value = ad_runvalue;
 
   ytdl(url, {
     filter: format => {
@@ -154,8 +154,7 @@ function downAudio() {
     .on("finish", () => {
       ffmpeg()
         .on("error", console.error)
-        .on("progress", progress => {
-        })
+        .on("progress", progress => {})
         .on("end", () => {
           fs.unlink(audioOutput, err => {
             if (err) console.error(err);
@@ -164,6 +163,9 @@ function downAudio() {
           });
         });
     });
+  xacount++;
+  adcomplete.value = msgacomplete;
+  adcount.value = "" + xacount + " out of " + pacount;
 }
 
 //Move to Previous song
