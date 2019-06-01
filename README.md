@@ -1,20 +1,17 @@
 # JDownloader
- JDownloader is built for downloading videos/audios from Youtube. JDownloader uses responsive design pattern.check out [JDownloader](https://github.com/janakhpon/JDownloader.git).
+ JDownloader is built for downloading videos/audios from Youtube. JDownloader uses responsive design pattern.check out [JDownloader](https://github.com/janakhpon/DownYoutube.git).
 
 
-[![Build Status](https://secure.travis-ci.org/fent/node-ytdl.svg)](https://github.com/janakhpon/JDownloader)
-[![Dependency Status](https://david-dm.org/fent/node-ytdl.svg)](https://github.com/janakhpon/JDownloader)
-[![codecov](https://codecov.io/gh/fent/node-ytdl/branch/master/graph/badge.svg)](https://github.com/janakhpon/JDownloader)
 
 # Usage
 
 clone the repository
 
-    git clone https://github.com/janakhpon/JDownloader.git
+    git clone https://github.com/janakhpon/DownYoutube.git
 
 Get into root folder
 
-    cd JDownloader
+    cd DownYoutube
 
 Install Dependencies using [npm](https://www.npmjs.com/)
 
